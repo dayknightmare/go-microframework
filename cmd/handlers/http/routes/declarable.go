@@ -14,8 +14,15 @@ type Declarable interface {
 	DeclareRoutes(*echo.Group)
 }
 
-func GetProtectedRoutes(logger *logger.Logger, Environment string, MySql *database.MySql, idCreator *idCreator.IdCreator, validator *validator.Validator) map[string]Declarable {
-	dummyListRoutes := NewDummyRoutes(logger, Environment, MySql, idCreator, validator)
+func GetProtectedRoutes(
+	logger *logger.Logger,
+	Environment string,
+	MySql *database.MySql,
+	Redis *database.Redis,
+	idCreator *idCreator.IdCreator,
+	validator *validator.Validator,
+) map[string]Declarable {
+	dummyListRoutes := NewDummyRoutes(logger, Environment, MySql, Redis, idCreator, validator)
 	//{{codeGen1}}
 	domains := map[string]Declarable{
 		"dummy": dummyListRoutes,

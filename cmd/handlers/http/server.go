@@ -20,6 +20,7 @@ type Server struct {
 	config    *config.Config
 	logger    *logger.Logger
 	mysql     *database.MySql
+	redis     *database.Redis
 	idCreator *idCreator.IdCreator
 	validator *validator.Validator
 }
@@ -28,6 +29,7 @@ func NewServer(Environment string) *Server {
 	c := pkg.ServerDependencies["config"]
 	l := pkg.ServerDependencies["logger"]
 	m := pkg.ServerDependencies["mysql"]
+	r := pkg.ServerDependencies["redis"]
 	i := pkg.ServerDependencies["IdCreator"]
 	v := pkg.ServerDependencies["validator"]
 
@@ -36,6 +38,7 @@ func NewServer(Environment string) *Server {
 		config:      c.(*config.Config),
 		logger:      l.(*logger.Logger),
 		mysql:       m.(*database.MySql),
+		redis:       r.(*database.Redis),
 		idCreator:   i.(*idCreator.IdCreator),
 		validator:   v.(*validator.Validator),
 	}
@@ -54,7 +57,7 @@ func (hs *Server) Start(port string) {
 		pkg.Logger.Info(fmt.Sprintf("[http.Server] Booting %s", index))
 	}
 
-	protectedRoutes := routes.GetProtectedRoutes(hs.logger, hs.Environment, hs.mysql, hs.idCreator, hs.validator)
+	protectedRoutes := routes.GetProtectedRoutes(hs.logger, hs.Environment, hs.mysql, hs.redis, hs.idCreator, hs.validator)
 	publicRoutes := routes.GetPublicRoutes(hs.logger, hs.config)
 
 	public := server.Group("")

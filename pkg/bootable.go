@@ -26,6 +26,11 @@ var Mysql = database.NewMysql(
 	Config.ReadConfig("DB_PORT"),
 	Config.ReadConfig("DB_DATABASE"),
 )
+var Redis = database.NewRedis(
+	Logger,
+	Config.ReadConfig("REDIS_HOST"),
+	Config.ReadConfig("REDIS_PORT"),
+)
 
 var IdCreator = idCreator.NewIdCreator()
 var Validator = validator.NewValidator()
@@ -39,6 +44,7 @@ var ServerDependencies = map[string]Bootable{
 	"config":    Config,
 	"logger":    Logger,
 	"mysql":     Mysql,
+	"redis":     Redis,
 	"IdCreator": IdCreator,
 	"validator": Validator,
 }
